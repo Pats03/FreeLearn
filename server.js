@@ -34,7 +34,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-app.use(morgan('dev'));
+
 app.use('/files', express.static('files'));
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

@@ -6,16 +6,15 @@ import { verifyJWT } from '../utils/tokenUtils.js';
 
 export const authenticateUser = async (req, res, next) => {
   // check cookie
-  let token = req.cookies?.token;
+  let token = req.cookies.token || req.header('Authorization')?.split(' ')[1];
 
   // if no cookie, check Authorization header
-  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
-    token = req.headers.authorization.split(' ')[1];
-  }
+  if (!token)
+      return res
+        .status(401)
+        .json({ message: 'Unauthorized: No token provided' });
 
-  if (!token) {
-    throw new UnauthenticatedError('Authentication invalid');
-  }
+ console.log('Received Token in Middleware:', token);
 
   try {
     const payload = verifyJWT(token);

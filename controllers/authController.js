@@ -81,6 +81,8 @@ export const login = async (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now() + oneDay),
     secure: true, // Vercel is always HTTPS, so always true
+    domain: '.vercel.app',
+    path: '/',
     sameSite: 'None', // 👈 THIS is crucial for cross-site cookies
   });
 

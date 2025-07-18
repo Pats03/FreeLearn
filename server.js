@@ -1,4 +1,3 @@
-
 import 'express-async-errors';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -7,14 +6,20 @@ const app = express();
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
-
-
+app.use(
+  cors({
+    origin: 'https://free-learn-front.vercel.app', // replace with your frontend’s domain
+    credentials: true, // if you use cookies or authorization headers
+  })
+);
+app.use(cors());
 
 //routes
 import studentroute from './routes/studentRouter.js';
 import authRouter from './routes/authRouter.js';
-import teacherRouter from './routes/teacherRouter.js'
+import teacherRouter from './routes/teacherRouter.js';
 import legendRouter from './routes/legendRouter.js';
 import userRouter from './routes/userRouter.js';
 
@@ -27,7 +32,6 @@ import { authenticateUser } from './middleware/authMiddleware.js';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import path from 'path';
-
 
 app.use('/files', express.static('files'));
 
@@ -101,7 +105,6 @@ app.use('/api/v1/users', authenticateUser, userRouter);
 app.use('/api/v1/teacher', teacherRouter);
 
 app.use('/api/v1/legend', legendRouter);
-
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'no route matched' });

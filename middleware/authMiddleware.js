@@ -1,28 +1,36 @@
-import { UnauthenticatedError,UnauthorizedError } from '../errors/customErrors.js';
+import {
+  UnauthenticatedError,
+  UnauthorizedError,
+} from '../errors/customErrors.js';
 import { verifyJWT } from '../utils/tokenUtils.js';
+
 export const authenticateUser = async (req, res, next) => {
- console.log(req.cookies);
-  const { token } = req.cookies;
-  if (!token) {
-    throw new UnauthenticatedError('authentication invalid');
+  // check cookie
+  let token = req.cookies?.token;
+
+  // if no cookie, check Authorization header
+  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
   }
-   try {
-     const { userId, role } = verifyJWT(token);
-     if(role==='user')
-     {
-      var {standard}=verifyJWT(token);
-      req.user = { userId, role,standard };
-     }
-     else
-     {
-      req.user = { userId, role };
-     }
-     
-     next();
-   } catch (error) {
-     throw new UnauthenticatedError('authentication invalid');
-   }
-  
+
+  if (!token) {
+    throw new UnauthenticatedError('Authentication invalid');
+  }
+
+  try {
+    const payload = verifyJWT(token);
+
+    const { userId, role, standard } = payload;
+
+    req.user = { userId, role };
+    if (role === 'user' && standard) {
+      req.user.standard = standard;
+    }
+
+    next();
+  } catch (error) {
+    throw new UnauthenticatedError('Authentication invalid');
+  }
 };
 
 export const authorizePermissions = (...roles) => {

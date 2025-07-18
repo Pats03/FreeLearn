@@ -14,7 +14,6 @@ app.use(
     credentials: true, // if you use cookies or authorization headers
   })
 );
-app.use(cors());
 
 //routes
 import studentroute from './routes/studentRouter.js';

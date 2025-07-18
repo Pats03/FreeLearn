@@ -80,8 +80,10 @@ export const login = async (req, res) => {
   res.cookie('token', token, {
     httpOnly: true,
     expires: new Date(Date.now() + oneDay),
-    secure: process.env.NODE_ENV === 'production',
+    secure: true, // Vercel is always HTTPS, so always true
+    sameSite: 'None', // 👈 THIS is crucial for cross-site cookies
   });
+
   //console.log(token);
 res.status(StatusCodes.CREATED).json({ msg: 'user logged in' });
 };

@@ -88,6 +88,9 @@ app.get('/api/v1/test', (req, res) => {
   res.json({ msg: 'test route' });
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
+});
 
 app.use('/api/v1/subs', studentroute);
 

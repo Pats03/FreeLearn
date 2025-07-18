@@ -8,12 +8,14 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
-app.use(
-  cors({
-    origin: 'https://free-learn-front.vercel.app', // replace with your frontend’s domain
-    credentials: true, // if you use cookies or authorization headers
-  })
-);
+const corsOptions = {
+  origin: 'https://free-learn-front.vercel.app', // Allow frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow necessary headers
+  credentials: true, // Important: Allow cookies and Authorization headers
+};
+
+app.use(cors(corsOptions));
 
 //routes
 import studentroute from './routes/studentRouter.js';

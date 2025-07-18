@@ -34,6 +34,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
+app.use(morgan('dev'));
 app.use('/files', express.static('files'));
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -43,9 +44,7 @@ app.use(cookieParser());
 
 app.use(express.json());
 
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+app.use(morgan('dev'));
 
 //Get All subs
 // app.get('/api/v1/subs')
